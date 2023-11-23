@@ -11,6 +11,7 @@ namespace ChessEngineTestUI.Game
         Rook,
         Bishop,
         Knight,
-        Pawn
+        Pawn,
+        Empty
     }
 }

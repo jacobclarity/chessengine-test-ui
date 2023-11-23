@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessEngineTestUI.WebUI.Server", "ChessEngineTestUI.WebUI\Server\ChessEngineTestUI.WebUI.Server.csproj", "{557007C0-7DD6-437F-9202-769AD86BAA12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessEngineTestUI.WebUI.Server", "ChessEngineTestUI.WebUI\Server\ChessEngineTestUI.WebUI.Server.csproj", "{557007C0-7DD6-437F-9202-769AD86BAA12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessEngineTestUI.WebUI.Client", "ChessEngineTestUI.WebUI\Client\ChessEngineTestUI.WebUI.Client.csproj", "{B94BC719-8F3B-422C-90EC-606DFEABD688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessEngineTestUI.WebUI.Client", "ChessEngineTestUI.WebUI\Client\ChessEngineTestUI.WebUI.Client.csproj", "{B94BC719-8F3B-422C-90EC-606DFEABD688}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessEngineTestUI.Game", "ChessEngineTestUI.Game\ChessEngineTestUI.Game.csproj", "{DEDD62C9-1241-4780-83F1-BCB0D5C3E156}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B94BC719-8F3B-422C-90EC-606DFEABD688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B94BC719-8F3B-422C-90EC-606DFEABD688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B94BC719-8F3B-422C-90EC-606DFEABD688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEDD62C9-1241-4780-83F1-BCB0D5C3E156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEDD62C9-1241-4780-83F1-BCB0D5C3E156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEDD62C9-1241-4780-83F1-BCB0D5C3E156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEDD62C9-1241-4780-83F1-BCB0D5C3E156}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
