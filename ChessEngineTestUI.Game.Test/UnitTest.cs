@@ -3,17 +3,34 @@ namespace ChessEngineTestUI.Game.Test
     public class UnitTest
     {
         [Fact]
-        public void FenParsing()
+        public void TempRunCodePath()
         {
-            BoardPositionGenerator generator = new BoardPositionGenerator();
+            // temporary testing of Game library code
+            // that isn't intended to be an actual unit test
+            FenParser parser = new FenParser();
 
-            IBoard startingPos = generator.GetNewGameStartingPosition();
+            BoardAndGameState state = parser.ParseStartFromFenString("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-            DebugPrinter printer = new DebugPrinter();
+            ;
+        }
 
-            string board = printer.PrintBoardPosition(startingPos);
+        [Fact]
+        public void FenSerializeStartingPosition()
+        {
+            BoardPositionGenerator positionGenerator = new BoardPositionGenerator();
+            GameStateGenerator stateGenerator = new GameStateGenerator();
 
-            Console.WriteLine(board);
+            IBoard startingPosition = positionGenerator.GetNewGameStartingPosition();
+
+            GameState startingState = stateGenerator.GetStartingPositionGameState();
+
+            BoardAndGameState fullState = new BoardAndGameState(startingPosition, startingState);
+
+            FenSerializer fen = new FenSerializer();
+
+            string fenStr = fen.GetFenStringForPosition(fullState);
+
+            Assert.Equal("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", fenStr);
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChessEngineTestUI.Game
 {
-    internal enum CastlingAvailability
+    public enum CastlingAvailability
     {
         Kingside,
         Queenside,

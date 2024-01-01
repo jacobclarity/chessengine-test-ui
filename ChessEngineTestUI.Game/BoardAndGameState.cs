@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChessEngineTestUI.Game
 {
-    internal class BoardAndGameState
+    public class BoardAndGameState
     {
         public IBoard Board { get; }
         public GameState GameState { get; }

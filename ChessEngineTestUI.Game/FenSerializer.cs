@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChessEngineTestUI.Game
 {
-    internal class FenNotator
+    public class FenSerializer
     {
         public string GetFenStringForPosition(BoardAndGameState state)
         {

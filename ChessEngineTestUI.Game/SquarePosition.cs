@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChessEngineTestUI.Game
 {
-    internal class SquarePosition
+    public class SquarePosition
     {
         public int Rank { get; }
         public int File { get; }

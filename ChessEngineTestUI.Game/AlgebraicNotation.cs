@@ -40,6 +40,8 @@ namespace ChessEngineTestUI.Game
         }
 
         private Dictionary<T2, T1> CreateInverseDictionary<T1, T2>(Dictionary<T1, T2> sourceDictionary)
+            where T1: notnull
+            where T2: notnull
         {
             Dictionary<T2, T1> invertedDictionary = new Dictionary<T2, T1>();
 
