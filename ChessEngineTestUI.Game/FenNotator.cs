@@ -10,12 +10,17 @@ namespace ChessEngineTestUI.Game
         {
             StringBuilder builder = new StringBuilder();
 
-            for (int rank = 8; rank >= 0; --rank)
+            for (int rank = 8; rank >= 1; --rank)
             {
                 AppendRankString(builder, state.Board, rank);
+
+                if (rank > 1)
+                    builder.Append("/");
             }
 
-            // append state stuff
+            builder.Append(" ");
+
+            AppendGameStateString(builder, state.GameState);
 
             return builder.ToString();
         }
@@ -63,6 +68,8 @@ namespace ChessEngineTestUI.Game
             else
                 builder.Append('b');
 
+            builder.Append(" ");
+
             // castling availability
             // list white, then black. White can be K, Q, or KQ. Black can be k, q, or kq.
             // if a side has no castling options, there are no letters. If neither side has castling options,
@@ -89,6 +96,8 @@ namespace ChessEngineTestUI.Game
                     builder.Append("q");
             }
 
+            builder.Append(" ");
+
             // en passant target square
             if (state.EnPassantTargetSquare is null)
                 builder.Append("-");
@@ -102,6 +111,15 @@ namespace ChessEngineTestUI.Game
                 builder.Append(squareNotation.ToLower());
             }
 
+            builder.Append(" ");
+
+            // 50 move draw counter
+            builder.Append(state.HalfMoveCounterFor50MoveDraw);
+
+            builder.Append(" ");
+
+            // full move counter
+            builder.Append(state.FullMoveCounter);
         }
     }
 }

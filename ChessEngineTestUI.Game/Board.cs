@@ -12,7 +12,8 @@ namespace ChessEngineTestUI.Game
         {
             _squares = new MutableSquareData[64];
 
-            CopyBoard(BoardPositionGenerator.GetEmptyBoard());
+            for (int i = 0; i < _squares.Length; ++i)
+                _squares[i] = new MutableSquareData(PieceType.Empty, PieceColor.White);
         }
 
         public Board(Board other)
@@ -31,7 +32,7 @@ namespace ChessEngineTestUI.Game
         // rank 1-8, file 1-8
         private int MapPositionToArray(int rank, int file)
         {
-            if (rank < 1 || rank >= 8 || file < 1 || file >= 8)
+            if (rank < 1 || rank > 8 || file < 1 || file > 8)
                 throw new Exception($"rank and file must be in [1, 8]; invalid coordinates rank={rank}, file={file}");
 
             return (rank - 1) * 8 + (file - 1);
