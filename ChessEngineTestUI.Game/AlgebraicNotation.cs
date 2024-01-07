@@ -70,10 +70,10 @@ namespace ChessEngineTestUI.Game
         {
             PieceType type;
 
-            bool mapped = _letterPieceMap.TryGetValue(letter, out type);
+            bool mapped = _letterPieceMap.TryGetValue(char.ToUpper(letter), out type);
 
             if (!mapped)
-                throw new Exception($"Failed to map letter '{letter}' to a piece type");
+                throw new Exception($"Failed to map letter '{char.ToUpper(letter)}' to a piece type");
 
             return type;
         }

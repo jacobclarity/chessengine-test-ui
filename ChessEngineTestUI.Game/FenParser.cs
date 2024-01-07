@@ -23,26 +23,30 @@ namespace ChessEngineTestUI.Game
 
             string gameStateString = fenString.Substring(firstSpace + 1);
 
-            ;
+            IBoard board = ParseBoardFromString(boardPositionString);
 
             // todo call sub functions
-            return new BoardAndGameState(null, null);
+            return new BoardAndGameState(board, null);
         }
 
-        private IBoard ParseBoardFromString(string boardString)
+        private void AssertFenBoardPositionStringValid(string boardString)
         {
             // input like rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 
-            Board board = new Board();
+            List<char> rankPieceCharacters = new List<char>{ 'R', 'N', 'B', 'Q', 'K', 'P' };
+            List<char> rankDigitCharacters = new List<char> { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            List<char> rankCharacters = new List<char>();
 
-            AlgebraicNotation alNotator = new AlgebraicNotation();
+            rankCharacters.AddRange(rankPieceCharacters);
+            rankCharacters.AddRange(rankDigitCharacters);
 
-            char[] pieceCharacters = new char[] { 'R', 'N', 'B', 'Q', 'K', 'P' };
-            char[] digitCharacters = new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-            char[] legalCharacters = new char[] { 'R', 'N', 'B', 'Q', 'K', 'P', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            List<char> fullBoardStringLegalCharacters = new List<char>();
+
+            fullBoardStringLegalCharacters.AddRange(rankCharacters);
+            fullBoardStringLegalCharacters.Add('/');
 
             for (int i = 0; i < boardString.Length; ++i)
-                if (!legalCharacters.Contains(char.ToUpper(boardString[i])))
+                if (!fullBoardStringLegalCharacters.Contains(char.ToUpper(boardString[i])))
                     throw new Exception($"Failed to parse FEN string due to invalid character '{boardString[i]}' at position {i}, in fen string '{boardString}'");
 
             string[] rankStrings = boardString.Split("/");
@@ -50,49 +54,106 @@ namespace ChessEngineTestUI.Game
             if (rankStrings.Length != 8)
                 throw new Exception($"Failed to parse FEN string due to wrong numbers of ranks. Expected 8 ranks, found {rankStrings.Length} in string '{boardString}'");
 
-            throw new Exception("Not implemented yet");
+            // the rank strings are ordered with 8th rank first, 1st rank last
+            // so we start on 8, and each new rank string we go to the next lower rank
 
-            /*
-            for (int rank = 8; rank >= 0; --rank)
+            AlgebraicNotation alNotator = new AlgebraicNotation();
+
+            for (int rank = 8; rank >= 1; --rank)
             {
-                // the rank strings come in reverse order, where the 8th rank is the first index in the array
-                // so we need to invert our index
+                // need to invert the array index, as index 0 is rank 8
                 string rankString = rankStrings[8 - rank];
 
                 if (string.IsNullOrWhiteSpace(rankString))
                     throw new Exception($"Failed to parse FEN string due to empty rank string on rank {rank} in string '{boardString}'");
 
-                int file = 1;
+                // each rank string should denote 8 placements, either pieces or blanks
+                // so if we sum together 1 place per letter, and the numeric valid of each digit
+                // it should equal 8
+                int columnCount = 0;
 
-                while (file <= 8)
+                foreach (char c in rankString)
                 {
-                    char character = boardString[stringCharacterIndex];
-
-                    if (char.IsDigit(character))
+                    if (char.IsDigit(c))
                     {
-                        // number indicating blank spaces in the rank
-                        int emptySpaces = (int) char.GetNumericValue(character);
+                        int emptySpaces = (int)char.GetNumericValue(c);
 
-                        if (emptySpaces + file > 8)
-                            throw new Exception("Failed to parse fen string, ")
+                        columnCount += emptySpaces;
                     }
                     else
-                    {
-                        // piece
+                        columnCount += 1;
+                }
 
-                        PieceType piece = alNotator.GetPieceTypeFromLetter(character);
+                if (columnCount != 8)
+                    throw new Exception($"Failed to parse FEN string due to incorrect column count {columnCount} in rank string '{rankString}'" +
+                                        $" (rank={rank}) in FEN board position string '{boardString}'");
 
-                        PieceColor color = char.IsUpper(character) ? PieceColor.White : PieceColor.Black;
+                // check if characters valid
+                foreach (char c in rankString)
+                {
+                    bool isValidCharacter = rankCharacters.Contains(char.ToUpper(c));
 
-                        board.SetSquare(rank, file, piece, color);
-
-                        ++file;
-                    }
+                    if (!isValidCharacter)
+                        throw new Exception($"Failed to parse FEN string due to invalid character '{char.ToUpper(c)}' in FEN board position string {boardString}");
                 }
             }
-        */
-        
-        
+        }
+
+        private IBoard ParseBoardFromString(string boardString)
+        {
+            // input like rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+
+            AssertFenBoardPositionStringValid(boardString);
+
+            Board board = new Board();
+
+            string[] rankStrings = boardString.Split("/");
+            // the rank strings are ordered with 8th rank first, 1st rank last
+            // so we start on 8, and each new rank string we go to the next lower rank
+            int rank = 8;
+
+            foreach (string rankString in rankStrings)
+            {
+                ParseRankFromRankString(rank, rankString, board);
+
+                --rank;
+            }
+
+            return board;
+        }
+
+        // given FEN rank string, modifies board on rank to match the specified pieces
+        private void ParseRankFromRankString(int rank, string rankString, Board board)
+        {
+            // given input like "4P3", that rank has 4 empty spaces, a white pawn, and 3 empty spacse
+
+            AlgebraicNotation alNotator = new AlgebraicNotation();
+
+            int file = 1;
+
+            foreach (char character in rankString)
+            {
+                if (char.IsDigit(character))
+                {
+                    // number indicating blank spaces in the rank
+
+                    int emptySpaces = (int)char.GetNumericValue(character);
+
+                    file += emptySpaces;
+                }
+                else
+                {
+                    // piece
+
+                    PieceType piece = alNotator.GetPieceTypeFromLetter(character);
+
+                    PieceColor color = char.IsUpper(character) ? PieceColor.White : PieceColor.Black;
+
+                    board.SetSquare(rank, file, piece, color);
+
+                    ++file;
+                }
+            }
         }
     }
 }

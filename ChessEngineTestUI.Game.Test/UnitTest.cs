@@ -9,7 +9,7 @@ namespace ChessEngineTestUI.Game.Test
             // that isn't intended to be an actual unit test
             FenParser parser = new FenParser();
 
-            BoardAndGameState state = parser.ParseStartFromFenString("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+            BoardAndGameState state = parser.ParseStartFromFenString("7r/2p5/1p1pkp2/pP3R2/P1P1P1Pp/3n1P1P/R5K1/8 w - - 2 46");
 
             ;
         }
